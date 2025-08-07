@@ -1,0 +1,1983 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Revenge Learning Platform</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React Libraries -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Babel for JSX compilation in browser -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body class="bg-purple-100">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // --- React Code Starts Here ---
+        // The entire React code from the previous response is placed here without any changes.
+
+        const { useState, useEffect, createContext, useContext } = React;
+
+        // --- সিমুলেটেড ব্যাকএন্ড ডেটা (ইন-মেমরি) ---
+        // এই ডেটা পৃষ্ঠা রিফ্রেশ করলে রিসেট হয়ে যাবে। ডেটা সংরক্ষণের জন্য একটি বাস্তব ব্যাকএন্ড প্রয়োজন।
+
+        const initialCourses = [
+            {
+                id: 'course1',
+                name: 'পদার্থবিজ্ঞান প্রথম পত্র',
+                description: 'একাদশ ও দ্বাদশ শ্রেণীর পদার্থবিজ্ঞান প্রথম পত্রের সম্পূর্ণ কোর্স। এই কোর্সে ভেক্টর, গতিবিদ্যা, কাজ, শক্তি ও ক্ষমতা, মহাকর্ষ, পর্যায়বৃত্ত গতি, তরঙ্গ, শব্দ, আলোর প্রতিফলন, প্রতিসরণ, এবং আধুনিক পদার্থবিজ্ঞানের ধারণা সহ সকল গুরুত্বপূর্ণ অধ্যায় বিস্তারিতভাবে আলোচনা করা হয়েছে। প্রতিটি অধ্যায়ে রয়েছে ভিডিও লেকচার, অনুশীলন প্রশ্ন, এবং কুইজ।',
+                price: 1200,
+                category: 'hsc-science',
+                modules: [
+                    {
+                        id: 'mod1',
+                        name: 'ভেক্টর',
+                        lessons: [
+                            { id: 'les1.1', name: 'ভেক্টরের পরিচিতি', content: 'ভেক্টর কী, ভেক্টরের প্রকারভেদ, যোগ-বিয়োগ, এবং ভেক্টরের জ্যামিতিক ব্যাখ্যা।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les1.2', name: 'ভেক্টরের গুণন', content: 'ডট গুণন ও ক্রস গুণন, এদের ব্যবহার, এবং ভেক্টর ক্যালকুলাসের মৌলিক ধারণা।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les1.3', name: 'ভেক্টরের প্রয়োগ', content: 'পদার্থবিজ্ঞানের বিভিন্ন সমস্যা সমাধানে ভেক্টরের প্রয়োগ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                    {
+                        id: 'mod2',
+                        name: 'গতিবিদ্যা',
+                        lessons: [
+                            { id: 'les2.1', name: 'সরলরৈখিক গতি', content: 'দূরত্ব, সরণ, দ্রুতি, বেগ, ত্বরণ, এবং গতির সমীকরণাবলী।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les2.2', name: 'প্রাসের গতি', content: 'প্রাসের সর্বোচ্চ উচ্চতা, পাল্লা, উড্ডয়নকাল, এবং প্রাসের গতির সমীকরণ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les2.3', name: 'আপেক্ষিক গতি', content: 'আপেক্ষিক গতি কী, আপেক্ষিক গতির সমস্যা সমাধান।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                    {
+                        id: 'mod3',
+                        name: 'কাজ, শক্তি ও ক্ষমতা',
+                        lessons: [
+                            { id: 'les3.1', name: 'কাজ ও শক্তি', content: 'কাজ, শক্তি, এবং শক্তির নিত্যতা সূত্র।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les3.2', name: 'ক্ষমতা', content: 'ক্ষমতা, কর্মদক্ষতা, এবং এদের ব্যবহারিক প্রয়োগ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                ],
+            },
+            {
+                id: 'course2',
+                name: 'গণিত দ্বিতীয় পত্র',
+                description: 'একাদশ ও দ্বাদশ শ্রেণীর গণিত দ্বিতীয় পত্রের সম্পূর্ণ কোর্স। এই কোর্সে ফাংশন, অন্তরীকরণ, যোগজীকরণ, ত্রিকোণমিতি, এবং জটিল সংখ্যা সহ সকল গুরুত্বপূর্ণ অধ্যায় বিস্তারিতভাবে আলোচনা করা হয়েছে। প্রতিটি অধ্যায়ে রয়েছে ভিডিও লেকচার, অনুশীলন প্রশ্ন, এবং কুইজ।',
+                price: 1500,
+                category: 'hsc-science',
+                modules: [
+                    {
+                        id: 'mod4',
+                        name: 'ফাংশন',
+                        lessons: [
+                            { id: 'les4.1', name: 'ফাংশনের সংজ্ঞা ও প্রকারভেদ', content: 'এক-এক ফাংশন, সার্বিক ফাংশন, এবং ফাংশনের ডোমেন ও রেঞ্জ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les4.2', name: 'ফাংশনের লেখচিত্র', content: 'বিভিন্ন ফাংশনের লেখচিত্র অঙ্কন ও বিশ্লেষণ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                    {
+                        id: 'mod5',
+                        name: 'অন্তরীকরণ',
+                        lessons: [
+                            { id: 'les5.1', name: 'অন্তরীকরণের মৌলিক ধারণা', content: 'অন্তরীকরণের সংজ্ঞা, সূত্রাবলী, এবং প্রয়োগ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les5.2', name: 'অন্তরীকরণের ব্যবহার', content: 'সর্বোচ্চ ও সর্বনিম্ন মান, স্পর্শক ও অভিলম্ব।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                ],
+            },
+            {
+                id: 'course3',
+                name: 'রসায়ন প্রথম পত্র',
+                description: 'একাদশ ও দ্বাদশ শ্রেণীর রসায়ন প্রথম পত্রের সম্পূর্ণ কোর্স। এই কোর্সে পর্যায় সারণী, রাসায়নিক বন্ধন, জারণ-বিজারণ, এবং জৈব রসায়নের মৌলিক ধারণা সহ সকল গুরুত্বপূর্ণ অধ্যায় বিস্তারিতভাবে আলোচনা করা হয়েছে। প্রতিটি অধ্যায়ে রয়েছে ভিডিও লেকচার, অনুশীলন প্রশ্ন, এবং কুইজ।',
+                price: 1300,
+                category: 'hsc-science',
+                modules: [
+                    {
+                        id: 'mod6',
+                        name: 'পর্যায় সারণী',
+                        lessons: [
+                            { id: 'les6.1', name: 'পর্যায় সারণীর ইতিহাস', content: 'বিভিন্ন বিজ্ঞানীর অবদান, এবং পর্যায় সারণীর আধুনিক রূপ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les6.2', name: 'মৌলের পর্যায়বৃত্ত ধর্ম', content: 'ইলেকট্রন আসক্তি, তড়িৎ ঋণাত্মকতা, এবং আয়নীকরণ শক্তি।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                    {
+                        id: 'mod7',
+                        name: 'রাসায়নিক বন্ধন',
+                        lessons: [
+                            { id: 'les7.1', name: 'আয়নিক বন্ধন', content: 'আয়নিক বন্ধন কী, আয়নিক বন্ধনের বৈশিষ্ট্য।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les7.2', name: 'সমযোজী বন্ধন', content: 'সমযোজী বন্ধন কী, সমযোজী বন্ধনের প্রকারভেদ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                ],
+            },
+            {
+                id: 'course4',
+                name: 'বাংলা প্রথম পত্র (SSC)',
+                description: 'এসএসসি বাংলা প্রথম পত্রের সম্পূর্ণ কোর্স। এই কোর্সে গদ্য, পদ্য, নাটক, উপন্যাস, এবং ব্যাকরণের সকল গুরুত্বপূর্ণ বিষয় বিস্তারিতভাবে আলোচনা করা হয়েছে। প্রতিটি অধ্যায়ে রয়েছে ভিডিও লেকচার, অনুশীলন প্রশ্ন, এবং কুইজ।',
+                price: 800,
+                category: 'ssc-arts',
+                modules: [
+                    {
+                        id: 'mod8',
+                        name: 'গদ্য',
+                        lessons: [
+                            { id: 'les8.1', name: 'আম-আঁটির ভেঁপু', content: 'গল্পের সারসংক্ষেপ ও চরিত্র বিশ্লেষণ, এবং গল্পের মূলভাব।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les8.2', name: 'মানব কল্যাণ', content: 'প্রবন্ধের মূলভাব ও লেখকের পরিচিতি।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                ],
+            },
+            {
+                id: 'course5',
+                name: 'হিসাববিজ্ঞান (Commerce)',
+                description: 'এইচএসসি হিসাববিজ্ঞান কোর্সের বিস্তারিত আলোচনা। এই কোর্সে হিসাববিজ্ঞানের পরিচিতি, লেনদেন, দুতরফা দাখিলা পদ্ধতি, জাবেদা, খতিয়ান, রেওয়ামিল, আর্থিক বিবরণী, এবং অন্যান্য গুরুত্বপূর্ণ বিষয় বিস্তারিতভাবে আলোচনা করা হয়েছে। প্রতিটি অধ্যায়ে রয়েছে ভিডিও লেকচার, অনুশীলন প্রশ্ন, এবং কুইজ।',
+                price: 1100,
+                category: 'hsc-commerce',
+                modules: [
+                    {
+                        id: 'mod9',
+                        name: 'হিসাববিজ্ঞানের পরিচিতি',
+                        lessons: [
+                            { id: 'les9.1', name: 'হিসাববিজ্ঞানের উদ্দেশ্য', content: 'হিসাববিজ্ঞানের মূলনীতি, এবং হিসাববিজ্ঞানের প্রকারভেদ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les9.2', name: 'লেনদেন', content: 'লেনদেন কী, লেনদেনের বৈশিষ্ট্য, এবং লেনদেনের প্রকারভেদ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                ],
+            },
+            {
+                id: 'course6',
+                name: 'ভূগোল ও পরিবেশ (SSC)',
+                description: 'এসএসসি ভূগোল ও পরিবেশের সম্পূর্ণ কোর্স। এই কোর্সে ভূগোল ও পরিবেশের ধারণা, পৃথিবীর গঠন, বায়ুমণ্ডল, জলবায়ু, এবং পরিবেশ দূষণ সহ সকল গুরুত্বপূর্ণ বিষয় বিস্তারিতভাবে আলোচনা করা হয়েছে। প্রতিটি অধ্যায়ে রয়েছে ভিডিও লেকচার, অনুশীলন প্রশ্ন, এবং কুইজ।',
+                price: 900,
+                category: 'ssc-arts',
+                modules: [
+                    {
+                        id: 'mod10',
+                        name: 'ভূগোল ও পরিবেশের ধারণা',
+                        lessons: [
+                            { id: 'les10.1', name: 'ভূগোল কী', content: 'ভূগোলের শাখা ও পরিধি, এবং ভূগোলের গুরুত্ব।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les10.2', name: 'পরিবেশ কী', content: 'পরিবেশের উপাদান, এবং পরিবেশের প্রকারভেদ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                ],
+            },
+            {
+                id: 'course7',
+                name: 'জীববিজ্ঞান (SSC)',
+                description: 'এসএসসি জীববিজ্ঞান কোর্সের বিস্তারিত আলোচনা। এই কোর্সে জীবকোষ ও টিস্যু, সালোকসংশ্লেষণ, শ্বসন, এবং বংশগতি সহ সকল গুরুত্বপূর্ণ বিষয় বিস্তারিতভাবে আলোচনা করা হয়েছে। প্রতিটি অধ্যায়ে রয়েছে ভিডিও লেকচার, অনুশীলন প্রশ্ন, এবং কুইজ।',
+                price: 950,
+                category: 'ssc-science',
+                modules: [
+                    {
+                        id: 'mod11',
+                        name: 'জীবকোষ ও টিস্যু',
+                        lessons: [
+                            { id: 'les11.1', name: 'কোষের গঠন', content: 'উদ্ভিদ কোষ ও প্রাণী কোষ, এবং কোষের অঙ্গাণু।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les11.2', name: 'টিস্যু', content: 'টিস্যু কী, টিস্যুর প্রকারভেদ, এবং টিস্যুর কাজ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                ],
+            },
+            {
+                id: 'course8',
+                name: 'ইসলাম শিক্ষা (Alim)',
+                description: 'আলিম শ্রেণির ইসলাম শিক্ষা কোর্সের বিস্তারিত আলোচনা। এই কোর্সে কুরআন ও হাদিস, ইসলামি আইন, এবং ইসলামি সংস্কৃতি সহ সকল গুরুত্বপূর্ণ বিষয় বিস্তারিতভাবে আলোচনা করা হয়েছে। প্রতিটি অধ্যায়ে রয়েছে ভিডিও লেকচার, অনুশীলন প্রশ্ন, এবং কুইজ।',
+                price: 1000,
+                category: 'alim-arts',
+                modules: [
+                    {
+                        id: 'mod12',
+                        name: 'কুরআন ও হাদিস',
+                        lessons: [
+                            { id: 'les12.1', name: 'কুরআনের পরিচিতি', content: 'কুরআনের গুরুত্ব ও শিক্ষা, এবং কুরআনের বিষয়বস্তু।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les12.2', name: 'হাদিসের পরিচিতি', content: 'হাদিসের প্রকারভেদ, এবং হাদিসের গুরুত্ব।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                ],
+            },
+            {
+                id: 'course9',
+                name: 'উচ্চতর গণিত (Alim Science)',
+                description: 'আলিম বিজ্ঞান শাখার উচ্চতর গণিত কোর্সের বিস্তারিত আলোচনা। এই কোর্সে জ্যামিতি, ত্রিকোণমিতি, এবং ক্যালকুলাস সহ সকল গুরুত্বপূর্ণ বিষয় বিস্তারিতভাবে আলোচনা করা হয়েছে। প্রতিটি অধ্যায়ে রয়েছে ভিডিও লেকচার, অনুশীলন প্রশ্ন, এবং কুইজ।',
+                price: 1350,
+                category: 'alim-science',
+                modules: [
+                    {
+                        id: 'mod13',
+                        name: 'জ্যামিতি',
+                        lessons: [
+                            { id: 'les13.1', name: 'স্থানাঙ্ক জ্যামিতি', content: 'সরলরেখা ও বৃত্ত, এবং পরাবৃত্ত, উপবৃত্ত, অধিবৃত্ত।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les13.2', name: 'ভেক্টর জ্যামিতি', content: 'ভেক্টর জ্যামিতির মৌলিক ধারণা, এবং ভেক্টর জ্যামিতির প্রয়োগ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                ],
+            },
+            {
+                id: 'course10',
+                name: 'ফিন্যান্স ও ব্যাংকিং (Alim Commerce)',
+                description: 'আলিম বাণিজ্য শাখার ফিন্যান্স ও ব্যাংকিং কোর্সের বিস্তারিত আলোচনা। এই কোর্সে অর্থায়নের মৌলিক ধারণা, মূলধন ব্যয়, এবং বিনিয়োগ সিদ্ধান্ত সহ সকল গুরুত্বপূর্ণ বিষয় বিস্তারিতভাবে আলোচনা করা হয়েছে। প্রতিটি অধ্যায়ে রয়েছে ভিডিও লেকচার, অনুশীলন প্রশ্ন, এবং কুইজ।',
+                price: 1050,
+                category: 'alim-commerce',
+                modules: [
+                    {
+                        id: 'mod14',
+                        name: 'অর্থায়নের মৌলিক ধারণা',
+                        lessons: [
+                            { id: 'les14.1', name: 'অর্থায়নের উদ্দেশ্য', content: 'অর্থায়নের প্রকারভেদ, এবং অর্থায়নের গুরুত্ব।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                            { id: 'les14.2', name: 'মূলধন ব্যয়', content: 'মূলধন ব্যয় কী, মূলধন ব্যয়ের প্রকারভেদ।', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+                        ],
+                    },
+                ],
+            },
+        ];
+
+        const initialUsersData = {
+            // উদাহরণ অ্যাডমিন ইউজার (পাসওয়ার্ড: admin123)
+            'admin-user-id': {
+                email: 'admin@example.com',
+                firstName: 'Admin',
+                lastName: 'User',
+                phoneNumber: '01XXXXXXXXX',
+                fatherName: 'N/A',
+                fatherPhoneNumber: 'N/A',
+                rollNumber: 'ADMIN-001', // Example roll number for admin
+                unlockedCourses: [],
+                courseProgress: {},
+                isAdmin: true,
+                createdAt: new Date().toISOString(),
+                password: 'admin123' // সিমুলেশনের জন্য পাসওয়ার্ড সংরক্ষণ করা হয়েছে, প্রোডাকশনের জন্য নয়
+            },
+            // উদাহরণ সাধারণ ইউজার (পাসওয়ার্ড: user123)
+            'regular-user-id': {
+                email: 'user@example.com',
+                firstName: 'Regular',
+                lastName: 'User',
+                phoneNumber: '01YYYYYYYYY',
+                fatherName: 'Mr. Regular',
+                fatherPhoneNumber: '01ZZZZZZZZZ',
+                rollNumber: 'ROLL-1001', // Example roll number for regular user
+                unlockedCourses: ['course1'], // কোর্স1 আনলক করা হয়েছে
+                courseProgress: {
+                    'course1': {
+                        totalModules: 3,
+                        completedModules: 1,
+                        completedLessons: {
+                            'mod1': ['les1.1', 'les1.2', 'les1.3'] // মডিউল1 এর সকল পাঠ সম্পন্ন হয়েছে
+                        }
+                    }
+                },
+                isAdmin: false,
+                createdAt: new Date().toISOString(),
+                password: 'user123' // সিমুলেশনের জন্য পাসওয়ার্ড সংরক্ষণ করা হয়েছে
+            }
+        };
+
+        const initialCodesData = [
+            { code: 'UNLOCKCOURSE1', isUsed: false, unlocksCourseId: 'course1', usedBy: null, usedAt: null },
+            { code: 'UNLOCKCOURSE2', isUsed: false, unlocksCourseId: 'course2', usedBy: null, usedAt: null },
+            { code: 'FREEHSCMATH', isUsed: false, unlocksCourseId: 'course2', usedBy: null, usedAt: null },
+            { code: 'TESTCODE', isUsed: true, unlocksCourseId: 'course3', usedBy: 'some-other-user', usedAt: new Date().toISOString() },
+        ];
+
+        const initialAnnouncementsData = [
+            { id: 'ann1', title: 'নতুন কোর্স আসছে!', content: 'খুব শীঘ্রই আমাদের প্ল্যাটফর্মে আরও নতুন কোর্স যুক্ত হতে চলেছে। চোখ রাখুন!', date: '২০২৩-১০-২৬' },
+            { id: 'ann2', title: 'পরীক্ষার প্রস্তুতি টিপস', content: 'পরীক্ষায় ভালো ফলাফলের জন্য আমাদের বিশেষ টিপসগুলো দেখে নিন।', date: '২০২৩-১০-২০' },
+        ];
+
+        // নতুন ব্যবহারকারী বা বেনামী সেশনের জন্য অনন্য আইডি তৈরি করতে সহায়ক ফাংশন
+        const generateUniqueId = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+        // --- প্রমাণীকরণ এবং গ্লোবাল ডেটার জন্য কনটেক্সট ---
+        const AppContext = createContext(null);
+
+        // অ্যাপ প্রদানকারী কম্পোনেন্ট
+        function AppProvider({ children }) {
+            const [currentUser, setCurrentUser] = useState(null);
+            const [userId, setUserId] = useState(null);
+            const [isAdmin, setIsAdmin] = useState(false);
+            const [loadingAuth, setLoadingAuth] = useState(true);
+
+            // ইন-মেমরি "ডেটাবেস" স্টেট
+            const [users, setUsers] = useState(initialUsersData);
+            const [courses, setCourses] = useState(initialCourses);
+            const [codes, setCodes] = useState(initialCodesData);
+            const [announcements, setAnnouncements] = useState(initialAnnouncementsData);
+
+            // প্রাথমিক বেনামী লগইন বা বিদ্যমান ব্যবহারকারী লোড সিমুলেট করুন
+            useEffect(() => {
+                const storedUserId = localStorage.getItem('currentUserId');
+                let currentId = storedUserId;
+
+                if (!currentId || !users[currentId]) {
+                    currentId = generateUniqueId();
+                    localStorage.setItem('currentUserId', currentId);
+                    // যদি ব্যবহারকারী না পাওয়া যায় তবে একটি নতুন বেনামী ব্যবহারকারী তৈরি করুন
+                    setUsers(prevUsers => ({
+                        ...prevUsers,
+                        [currentId]: {
+                            email: 'anonymous',
+                            unlockedCourses: [],
+                            courseProgress: {},
+                            isAdmin: false,
+                            createdAt: new Date().toISOString(),
+                            password: generateUniqueId() // বেনামী ব্যবহারকারীর জন্য ডামি পাসওয়ার্ড
+                        }
+                    }));
+                }
+
+                setCurrentUser({ uid: currentId, email: users[currentId]?.email || 'anonymous' });
+                setUserId(currentId);
+                setIsAdmin(users[currentId]?.isAdmin || false);
+                setLoadingAuth(false);
+            }, []); // শুধুমাত্র মাউন্ট করার সময় একবার চালান
+
+            // ব্যবহারকারী লগইন সিমুলেট করুন
+            const signIn = (email, password) => {
+                const userFound = Object.entries(users).find(([, userData]) => userData.email === email && userData.password === password);
+                if (userFound) {
+                    const [id, userData] = userFound;
+                    setCurrentUser({ uid: id, email: userData.email });
+                    setUserId(id);
+                    setIsAdmin(userData.isAdmin);
+                    localStorage.setItem('currentUserId', id); // লগইন সংরক্ষণ করুন
+                    return { success: true, user: { uid: id, email: userData.email } };
+                }
+                return { success: false, error: { message: 'ভুল ইমেইল বা পাসওয়ার্ড।' } };
+            };
+
+            // ব্যবহারকারী রেজিস্ট্রেশন সিমুলেট করুন
+            const register = (email, password, firstName, lastName, phoneNumber, fatherName, fatherPhoneNumber) => {
+                if (Object.values(users).some(user => user.email === email)) {
+                    return { success: false, error: { message: 'এই ইমেইল দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট বিদ্যমান।' } };
+                }
+                const newUserId = generateUniqueId();
+                const newRollNumber = 'ROLL-' + generateUniqueId().toUpperCase().substring(0, 6); // Generate a simple roll number
+
+                const newUser = {
+                    email,
+                    password, // Simulating password storage for demo
+                    firstName,
+                    lastName,
+                    phoneNumber,
+                    fatherName,
+                    fatherPhoneNumber,
+                    rollNumber: newRollNumber,
+                    unlockedCourses: [],
+                    courseProgress: {},
+                    isAdmin: false,
+                    createdAt: new Date().toISOString(),
+                };
+                setUsers(prevUsers => ({ ...prevUsers, [newUserId]: newUser }));
+                return { success: true, rollNumber: newRollNumber };
+            };
+
+            // ব্যবহারকারী লগআউট সিমুলেট করুন
+            const signOutUser = () => {
+                setCurrentUser(null);
+                setUserId(null);
+                setIsAdmin(false);
+                localStorage.removeItem('currentUserId');
+                // লগআউটের পর একটি বেনামী ব্যবহারকারীকে ফিরিয়ে আনুন
+                const newAnonymousId = generateUniqueId();
+                localStorage.setItem('currentUserId', newAnonymousId);
+                setUsers(prevUsers => ({
+                    ...prevUsers,
+                    [newAnonymousId]: {
+                        email: 'anonymous',
+                        unlockedCourses: [],
+                        courseProgress: {},
+                        isAdmin: false,
+                        createdAt: new Date().toISOString(),
+                        password: generateUniqueId()
+                    }
+                }));
+                setCurrentUser({ uid: newAnonymousId, email: 'anonymous' });
+                setUserId(newAnonymousId);
+            };
+
+            // অ্যাডমিন কর্তৃক নির্দিষ্ট ব্যবহারকারীকে লগআউট করা
+            const forceSignOutUser = (targetUserId) => {
+                // যদি টার্গেট ইউজার বর্তমানে লগইন করা ইউজার হয়, তাহলে তার লোকালস্টোরেজ থেকে আইডি সরান
+                const storedUserId = localStorage.getItem('currentUserId');
+                if (storedUserId === targetUserId) {
+                    localStorage.removeItem('currentUserId');
+                    // এবং বর্তমান সেশনটি রিসেট করুন (বেনামীতে ফিরে যান)
+                    signOutUser();
+                } else {
+                    // যদি টার্গেট ইউজার বর্তমানে লগইন করা ইউজার না হয়, তাহলে শুধু ইন-মেমরি ডেটা আপডেট করুন
+                    // (একটি বাস্তব ব্যাকএন্ডে, এটি সেই ব্যবহারকারীর সেশন টোকেন বাতিল করবে)
+                    // এখানে, সিমুলেশনের জন্য, আমরা ধরে নিচ্ছি যে লোকালস্টোরেজ থেকে আইডি সরিয়ে দিলেই যথেষ্ট।
+                }
+            };
+
+            // ব্যবহারকারীর ডেটা আনা সিমুলেট করুন
+            const getUserData = (uid) => users[uid];
+
+            // ব্যবহারকারীর ডেটা আপডেট করা সিমুলেট করুন
+            const updateUserData = (uid, data) => {
+                setUsers(prevUsers => ({
+                    ...prevUsers,
+                    [uid]: { ...prevUsers[uid], ...data }
+                }));
+            };
+
+            // কোর্স আনা সিমুলেট করুন
+            const getCoursesByCategory = (categoryId) => {
+                if (categoryId) {
+                    return courses.filter(course => course.category === categoryId);
+                }
+                return courses;
+            };
+
+            // একটি একক কোর্স আনা সিমুলেট করুন
+            const getCourseById = (id) => courses.find(course => course.id === id);
+
+            // আনলক কোড চেক এবং ব্যবহার করা সিমুলেট করুন
+            const useUnlockCode = (code, courseId, currentUserId) => {
+                const codeIndex = codes.findIndex(c => c.code === code.trim() && !c.isUsed);
+                if (codeIndex !== -1) {
+                    const foundCode = codes[codeIndex];
+                    if (foundCode.unlocksCourseId && foundCode.unlocksCourseId !== courseId) {
+                        return { success: false, message: 'এই কোডটি এই কোর্সের জন্য নয়।' };
+                    }
+
+                    setCodes(prevCodes => {
+                        const newCodes = [...prevCodes];
+                        newCodes[codeIndex] = { ...newCodes[codeIndex], isUsed: true, usedBy: currentUserId, usedAt: new Date().toISOString() };
+                        return newCodes;
+                    });
+
+                    // ব্যবহারকারীর আনলক করা কোর্স এবং অগ্রগতি আপডেট করুন
+                    const user = users[currentUserId];
+                    const updatedUnlockedCourses = [...(user.unlockedCourses || []), courseId];
+                    const courseToUnlock = getCourseById(courseId);
+                    const updatedCourseProgress = {
+                        ...(user.courseProgress || {}),
+                        [courseId]: {
+                            totalModules: courseToUnlock.modules ? courseToUnlock.modules.length : 0,
+                            completedModules: 0,
+                            completedLessons: {}
+                        }
+                    };
+                    updateUserData(currentUserId, {
+                        unlockedCourses: updatedUnlockedCourses,
+                        courseProgress: updatedCourseProgress
+                    });
+                    return { success: true, message: 'কোর্স সফলভাবে আনলক করা হয়েছে!' };
+                }
+                return { success: false, message: 'অবৈধ বা ব্যবহৃত কোড।' };
+            };
+
+            // একটি নতুন কোর্স যোগ করা সিমুলেট করুন (অ্যাডমিন ফাংশন)
+            const addCourse = (newCourse) => {
+                setCourses(prevCourses => [...prevCourses, { id: generateUniqueId(), ...newCourse }]);
+            };
+
+            // একটি নতুন কোড তৈরি করা সিমুলেট করুন (অ্যাডমিন ফাংশন)
+            const generateCode = (unlocksCourseId) => {
+                const newCode = {
+                    code: 'CODE-' + generateUniqueId().toUpperCase().substring(0, 8),
+                    isUsed: false,
+                    unlocksCourseId: unlocksCourseId || null,
+                    usedBy: null,
+                    usedAt: null
+                };
+                setCodes(prevCodes => [...prevCodes, newCode]);
+                return newCode;
+            };
+
+            // ঘোষণা আনা সিমুলেট করুন
+            const getAnnouncements = () => announcements;
+
+            // একটি ঘোষণা যোগ করা সিমুলেট করুন (অ্যাডমিন ফাংশন)
+            const addAnnouncement = (newAnn) => {
+                setAnnouncements(prevAnn => [...prevAnn, { id: generateUniqueId(), ...newAnn, date: new Date().toISOString().split('T')[0] }]);
+            };
+
+            // একটি ঘোষণা মুছে ফেলা সিমুলেট করুন (অ্যাডমিন ফাংশন)
+            const deleteAnnouncement = (id) => {
+                setAnnouncements(prevAnn => prevAnn.filter(ann => ann.id !== id));
+            };
+
+            const contextValue = {
+                currentUser,
+                userId,
+                isAdmin,
+                loadingAuth,
+                signIn,
+                register,
+                signOutUser,
+                forceSignOutUser, // নতুন যোগ করা হয়েছে
+                getUserData,
+                updateUserData,
+                getCoursesByCategory,
+                getCourseById,
+                useUnlockCode,
+                addCourse,
+                generateCode,
+                getAnnouncements,
+                addAnnouncement,
+                deleteAnnouncement,
+                allCourses: courses, // অ্যাডমিন প্যানেলের জন্য সকল কোর্স সরবরাহ করুন
+                allCodes: codes,     // অ্যাডমিন প্যানেলের জন্য সকল কোড সরবরাহ করুন
+                allUsers: users      // অ্যাডমিন প্যানেলের জন্য সকল ব্যবহারকারী সরবরাহ করুন
+            };
+
+            return (
+                <AppContext.Provider value={contextValue}>
+                    {children}
+                </AppContext.Provider>
+            );
+        }
+
+        // AppContext ব্যবহার করার জন্য কাস্টম হুক
+        function useAppContext() {
+            return useContext(AppContext);
+        }
+
+        // --- কম্পোনেন্ট ---
+
+        // লোডিং স্পিনার কম্পোনেন্ট
+        const LoadingSpinner = () => (
+            <div className="flex justify-center items-center h-screen bg-gradient-to-br from-purple-800 to-pink-500">
+                <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-purple-200"></div>
+                <p className="ml-4 text-white text-lg font-semibold">লোড হচ্ছে...</p>
+            </div>
+        );
+
+        // মেসেজ বক্স কম্পোনেন্ট (alert/confirm এর পরিবর্তে)
+        const MessageBox = ({ message, onClose, onConfirm, children }) => {
+            return (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
+                    <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center border-2 border-pink-500">
+                        <p className="text-lg font-semibold mb-4 text-gray-800">{message}</p>
+                        {onConfirm ? (
+                            children // Render custom buttons if onConfirm is provided
+                        ) : (
+                            <button
+                                onClick={onClose}
+                                className="px-6 py-2 bg-pink-600 text-white rounded-md hover:bg-pink-700 transition duration-300 font-medium shadow-md"
+                            >
+                                ঠিক আছে
+                            </button>
+                        )}
+                    </div>
+                </div>
+            );
+        };
+
+
+        // লগইন পেজ
+        function LoginPage({ onNavigate }) {
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+            const [message, setMessage] = useState('');
+            const { signIn } = useAppContext();
+
+            const handleLogin = (e) => {
+                e.preventDefault();
+                const result = signIn(email, password);
+                if (result.success) {
+                    setMessage('লগইন সফল হয়েছে!');
+                    onNavigate('home');
+                } else {
+                    setMessage(`লগইন ব্যর্থ হয়েছে: ${result.error.message}`);
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-800 to-pink-500 p-4">
+                    <form onSubmit={handleLogin} className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md border border-purple-300">
+                        <h2 className="text-3xl font-bold text-center text-purple-800 mb-6">লগইন</h2>
+                        <input
+                            type="email"
+                            placeholder="ইমেইল"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full p-3 mb-4 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                            required
+                        />
+                        <input
+                            type="password"
+                            placeholder="পাসওয়ার্ড"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-3 mb-6 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                            required
+                        />
+                        <button
+                            type="submit"
+                            className="w-full bg-purple-600 text-white p-3 rounded-md font-semibold hover:bg-purple-700 transition duration-300 shadow-md"
+                        >
+                            লগইন করুন
+                        </button>
+                        <p className="text-center mt-4 text-gray-600">
+                            কোনো অ্যাকাউন্ট নেই?{' '}
+                            <button type="button" onClick={() => onNavigate('register')} className="text-pink-600 hover:underline font-medium">
+                                এখানে রেজিস্ট্রেশন করুন
+                            </button>
+                        </p>
+                        {message && <MessageBox message={message} onClose={() => setMessage('')} />}
+                    </form>
+                </div>
+            );
+        }
+
+        // অ্যাডমিন লগইন পেজ
+        function AdminLoginPage({ onNavigate }) {
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+            const [message, setMessage] = useState('');
+            // useAppContext থেকে প্রয়োজনীয় ফাংশনগুলো কম্পোনেন্টের শুরুতে নিয়ে আসা হয়েছে
+            const { signIn, getUserData, signOutUser } = useAppContext();
+
+            const handleAdminLogin = (e) => {
+                e.preventDefault();
+                const result = signIn(email, password);
+                if (result.success) {
+                    const user = result.user;
+                    // getUserData এবং signOutUser এখন সরাসরি ব্যবহার করা হচ্ছে
+                    const userData = getUserData(user.uid);
+
+                    if (userData && userData.isAdmin) {
+                        setMessage('অ্যাডমিন লগইন সফল হয়েছে!');
+                        onNavigate('admin'); // অ্যাডমিন প্যানেলে নেভিগেট করুন
+                    } else {
+                        signOutUser(); // নন-অ্যাডমিন ব্যবহারকারীকে সাইন আউট করুন
+                        setMessage('আপনার অ্যাডমিন অ্যাক্সেস নেই।');
+                    }
+                } else {
+                    setMessage(`অ্যাডমিন লগইন ব্যর্থ হয়েছে: ${result.error.message}`);
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-800 to-pink-500 p-4">
+                    <form onSubmit={handleAdminLogin} className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md border border-purple-300">
+                        <h2 className="text-3xl font-bold text-center text-purple-800 mb-6">অ্যাডমিন লগইন</h2>
+                        <input
+                            type="email"
+                            placeholder="অ্যাডমিন ইমেইল"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full p-3 mb-4 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                            required
+                        />
+                        <input
+                            type="password"
+                            placeholder="পাসওয়ার্ড"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-3 mb-6 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                            required
+                        />
+                        <button
+                            type="submit"
+                            className="w-full bg-purple-600 text-white p-3 rounded-md font-semibold hover:bg-purple-700 transition duration-300 shadow-md"
+                        >
+                            লগইন করুন
+                        </button>
+                        <p className="text-center mt-4 text-gray-600">
+                            <button type="button" onClick={() => onNavigate('login')} className="text-pink-600 hover:underline font-medium">
+                                সাধারণ লগইনে ফিরে যান
+                            </button>
+                        </p>
+                        {message && <MessageBox message={message} onClose={() => setMessage('')} />}
+                    </form>
+                </div>
+            );
+        }
+
+        // রেজিস্ট্রেশন পেজ
+        function RegistrationPage({ onNavigate }) {
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+            const [firstName, setFirstName] = useState('');
+            const [lastName, setLastName] = useState('');
+            const [phoneNumber, setPhoneNumber] = useState('');
+            const [fatherName, setFatherName] = useState('');
+            const [fatherPhoneNumber, setFatherPhoneNumber] = useState('');
+            const [message, setMessage] = useState('');
+            const { register } = useAppContext();
+            const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
+            const handleRegister = (e) => {
+                e.preventDefault();
+                const result = register(email, password, firstName, lastName, phoneNumber, fatherName, fatherPhoneNumber);
+                if (result.success) {
+                    setMessage(`রেজিস্ট্রেশন সফল হয়েছে! আপনার রোল নম্বর: ${result.rollNumber}। অনুগ্রহ করে লগইন করুন।`);
+                    setRegistrationSuccess(true);
+                } else {
+                    setMessage(`রেজিস্ট্রেশন ব্যর্থ হয়েছে: ${result.error.message}`);
+                    setRegistrationSuccess(false);
+                }
+            };
+
+            const closeMessageBox = () => {
+                setMessage('');
+                if (registrationSuccess) {
+                    onNavigate('login');
+                }
+            };
+
+            return (
+                <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-800 to-pink-500 p-4">
+                    <form onSubmit={handleRegister} className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md border border-purple-300">
+                        <h2 className="text-3xl font-bold text-center text-purple-800 mb-6">রেজিস্ট্রেশন</h2>
+                        <input
+                            type="email"
+                            placeholder="ইমেইল"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full p-3 mb-4 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-900"
+                            required
+                        />
+                        <input
+                            type="password"
+                            placeholder="পাসওয়ার্ড"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="w-full p-3 mb-4 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-900"
+                            required
+                        />
+                        <input
+                            type="text"
+                            placeholder="প্রথম নাম"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            className="w-full p-3 mb-4 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-900"
+                            required
+                        />
+                        <input
+                            type="text"
+                            placeholder="শেষ নাম"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            className="w-full p-3 mb-4 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-900"
+                            required
+                        />
+                        <input
+                            type="tel"
+                            placeholder="ফোন নম্বর"
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            className="w-full p-3 mb-4 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-900"
+                            required
+                        />
+                        <input
+                            type="text"
+                            placeholder="বাবার নাম"
+                            value={fatherName}
+                            onChange={(e) => setFatherName(e.target.value)}
+                            className="w-full p-3 mb-4 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-900"
+                            required
+                        />
+                        <input
+                            type="tel"
+                            placeholder="বাবার ফোন নম্বর"
+                            value={fatherPhoneNumber}
+                            onChange={(e) => setFatherPhoneNumber(e.target.value)}
+                            className="w-full p-3 mb-6 border border-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 text-gray-900"
+                            required
+                        />
+                        <button
+                            type="submit"
+                            className="w-full bg-pink-600 text-white p-3 rounded-md font-semibold hover:bg-pink-700 transition duration-300 shadow-md"
+                        >
+                            রেজিস্টার করুন
+                        </button>
+                        <p className="text-center mt-4 text-gray-600">
+                            ইতিমধ্যে একটি অ্যাকাউন্ট আছে?{' '}
+                            <button type="button" onClick={() => onNavigate('login')} className="text-purple-600 hover:underline font-medium">
+                                এখানে লগইন করুন
+                            </button>
+                        </p>
+                        {message && <MessageBox message={message} onClose={closeMessageBox} />}
+                    </form>
+                </div>
+            );
+        }
+
+        // নেভিগেশন বার কম্পোনেন্ট (সাইডবার ইন্টিগ্রেশনের জন্য সরলীকৃত)
+        function Navbar({ onNavigate, toggleSidebar }) {
+            return (
+                <nav className="bg-purple-900 p-4 shadow-lg flex justify-between items-center lg:hidden"> {/* শুধুমাত্র ছোট স্ক্রিনে দৃশ্যমান */}
+                    <button onClick={toggleSidebar} className="text-white text-2xl p-2 rounded-md hover:bg-purple-700 transition duration-300">
+                        ☰ {/* হ্যামবার্গার আইকন */}
+                    </button>
+                    <button onClick={() => onNavigate('home')} className="text-white text-2xl font-bold hover:text-pink-300 transition duration-300">
+                        Student Revenge
+                    </button>
+                </nav>
+            );
+        }
+
+        // সাইডবার কম্পোনেন্ট
+        function Sidebar({ onNavigate, isOpen, toggleSidebar }) {
+            const { currentUser, isAdmin, userId, signOutUser } = useAppContext();
+
+            const handleLogout = () => {
+                signOutUser();
+                onNavigate('login');
+                toggleSidebar(); // লগআউটের পর সাইডবার বন্ধ করুন
+            };
+
+            const navItemClass = "block w-full text-left px-6 py-3 text-white text-lg hover:bg-purple-700 transition duration-300 rounded-md";
+
+            return (
+                <React.Fragment>
+                    {/* ছোট স্ক্রিনের জন্য ওভারলে */}
+                    {isOpen && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={toggleSidebar}></div>
+                    )}
+
+                    <div className={`fixed inset-y-0 left-0 w-64 bg-purple-900 shadow-xl transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 transition-transform duration-300 ease-in-out z-50 lg:static lg:w-64 lg:flex-shrink-0 lg:h-auto`}>
+                        <div className="p-4 flex justify-between items-center lg:hidden">
+                            <button onClick={() => onNavigate('home')} className="text-white text-2xl font-bold">
+                                Student Revenge
+                            </button>
+                            <button onClick={toggleSidebar} className="text-white text-2xl p-2 rounded-md hover:bg-purple-700 transition duration-300">
+                                ✕
+                            </button>
+                        </div>
+                        <nav className="mt-8">
+                            <ul>
+                                <li>
+                                    <button onClick={() => { onNavigate('home'); toggleSidebar(); }} className={navItemClass}>
+                                        সকল কোর্স
+                                    </button>
+                                </li>
+                                <li>
+                                    <button onClick={() => { onNavigate('announcements'); toggleSidebar(); }} className={navItemClass}>
+                                        ঘোষণা
+                                    </button>
+                                </li>
+                                <li>
+                                    <button onClick={() => { onNavigate('admin-login'); toggleSidebar(); }} className={navItemClass}>
+                                        অ্যাডমিন
+                                    </button>
+                                </li>
+                                {currentUser && currentUser.email !== 'anonymous' ? ( // ইমেইল/পাসওয়ার্ড দিয়ে লগইন করা হয়েছে কিনা তা পরীক্ষা করুন
+                                    <React.Fragment>
+                                        <li>
+                                            <button onClick={() => { onNavigate('profile'); toggleSidebar(); }} className={navItemClass}>
+                                                প্রোফাইল
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button onClick={handleLogout} className={navItemClass + " bg-pink-600 hover:bg-pink-700"}>
+                                                লগআউট
+                                            </button>
+                                        </li>
+                                        <li className="px-6 py-3 text-gray-300 text-sm mt-4">
+                                            ইউজার আইডি: {userId}
+                                        </li>
+                                    </React.Fragment>
+                                ) : (
+                                    <React.Fragment>
+                                        <li>
+                                            <button onClick={() => { onNavigate('login'); toggleSidebar(); }} className={navItemClass}>
+                                                লগইন
+                                            </button>
+                                        </li>
+                                        <li>
+                                            <button onClick={() => { onNavigate('register'); toggleSidebar(); }} className={navItemClass + " bg-pink-600 hover:bg-pink-700"}>
+                                                রেজিস্ট্রেশন
+                                            </button>
+                                        </li>
+                                    </React.Fragment>
+                                )}
+                            </ul>
+                        </nav>
+                    </div>
+                </React.Fragment>
+            );
+        }
+
+
+        // হোম পেজ (কোর্স ক্যাটাগরি)
+        function HomePage({ onNavigate }) {
+            const courseCategories = [
+                { name: 'SSC বিজ্ঞান', id: 'ssc-science' },
+                { name: 'SSC মানবিক', id: 'ssc-arts' },
+                { name: 'SSC ব্যবসায় শিক্ষা', id: 'ssc-commerce' },
+                { name: 'HSC বিজ্ঞান', id: 'hsc-science' },
+                { name: 'HSC মানবিক', id: 'hsc-arts' },
+                { name: 'HSC ব্যবসায় শিক্ষা', id: 'hsc-commerce' },
+                // 'আলিম বিজ্ঞান', 'আলিম মানবিক', 'আলিম ব্যবসায় শিক্ষা' ক্যাটাগরিগুলো এখান থেকে সরানো হয়েছে
+            ];
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-purple-800 to-pink-500 p-8">
+                    <h1 className="text-4xl font-bold text-center text-white mb-10">আমাদের কোর্সসমূহ</h1>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                        {courseCategories.map((category) => (
+                            <button
+                                key={category.id}
+                                onClick={() => onNavigate('course-list', { categoryId: category.id, categoryName: category.name })}
+                                className="bg-white p-6 rounded-lg shadow-xl hover:shadow-2xl transition duration-300 transform hover:scale-105
+                                        flex flex-col items-center justify-center text-center group border border-gray-200"
+                            >
+                                <div className="text-5xl mb-4 text-purple-600 group-hover:text-pink-600 transition duration-300">📚</div> {/* উদাহরণ আইকন */}
+                                <h2 className="text-2xl font-semibold text-purple-800 group-hover:text-pink-700 transition duration-300">
+                                    {category.name}
+                                </h2>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        // কোর্স তালিকা পেজ
+        function CourseListingPage({ onNavigate, categoryId, categoryName }) {
+            const { getCoursesByCategory } = useAppContext();
+            const [courses, setCourses] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [message, setMessage] = useState('');
+
+            useEffect(() => {
+                setLoading(true);
+                try {
+                    const fetchedCourses = getCoursesByCategory(categoryId);
+                    setCourses(fetchedCourses);
+                } catch (error) {
+                    setMessage(`কোর্স লোড করতে সমস্যা হয়েছে: ${error.message}`);
+                    console.error("কোর্স লোড করার সময় ত্রুটি:", error);
+                } finally {
+                    setLoading(false);
+                }
+            }, [categoryId, getCoursesByCategory]);
+
+            if (loading) return <LoadingSpinner />;
+            if (message) return <MessageBox message={message} onClose={() => setMessage('')} />;
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-purple-800 to-pink-500 p-8">
+                    <h1 className="text-4xl font-bold text-center text-white mb-10">{categoryName} কোর্সসমূহ</h1>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                        {courses.length > 0 ? (
+                            courses.map((course) => (
+                                <button
+                                    key={course.id}
+                                    onClick={() => onNavigate('course-detail', { courseId: course.id })}
+                                    className="bg-white p-6 rounded-lg shadow-xl hover:shadow-2xl transition duration-300 transform hover:scale-105
+                                            flex flex-col items-center text-center group border border-gray-200"
+                                >
+                                    <h2 className="text-2xl font-semibold text-purple-800 group-hover:text-pink-700 transition duration-300 mb-2">
+                                        {course.name}
+                                    </h2>
+                                    <p className="text-gray-600 mb-4 line-clamp-3">{course.description}</p>
+                                    <span className="text-lg font-bold text-pink-600">৳{course.price}</span>
+                                </button>
+                            ))
+                        ) : (
+                            <p className="text-white text-center text-xl col-span-full">কোনো কোর্স পাওয়া যায়নি এই ক্যাটাগরিতে।</p>
+                        )}
+                    </div>
+                    <div className="text-center mt-8">
+                        <button
+                            onClick={() => onNavigate('home')}
+                            className="bg-purple-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-purple-700 transition duration-300 shadow-md"
+                        >
+                            সকল ক্যাটাগরিতে ফিরে যান
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        // কোর্স বিস্তারিত পেজ
+        function CourseDetailPage({ onNavigate, courseId }) {
+            const { userId, currentUser, getCourseById, getUserData, useUnlockCode } = useAppContext();
+            const [course, setCourse] = useState(null);
+            const [isUnlocked, setIsUnlocked] = useState(false);
+            const [code, setCode] = useState('');
+            const [message, setMessage] = useState('');
+            const [loading, setLoading] = useState(true);
+
+            useEffect(() => {
+                const fetchCourseAndUserStatus = () => {
+                    setLoading(true);
+                    try {
+                        // কোর্স বিস্তারিত আনুন
+                        const fetchedCourse = getCourseById(courseId);
+                        if (fetchedCourse) {
+                            setCourse(fetchedCourse);
+                        } else {
+                            setMessage('কোর্সটি খুঁজে পাওয়া যায়নি।');
+                            setLoading(false);
+                            return;
+                        }
+
+                        // বর্তমান ব্যবহারকারীর জন্য কোর্স আনলক করা হয়েছে কিনা তা পরীক্ষা করুন
+                        if (currentUser && userId) {
+                            const userData = getUserData(userId);
+                            if (userData && userData.unlockedCourses && userData.unlockedCourses.includes(courseId)) {
+                                setIsUnlocked(true);
+                            }
+                        }
+                    } catch (error) {
+                        setMessage(`কোর্স লোড করতে সমস্যা হয়েছে: ${error.message}`);
+                        console.error("কোর্স বা ব্যবহারকারীর অবস্থা আনার সময় ত্রুটি:", error);
+                    } finally {
+                        setLoading(false);
+                    }
+                };
+
+                fetchCourseAndUserStatus();
+            }, [courseId, currentUser, userId, getCourseById, getUserData]);
+
+            const handleUnlockWithCode = () => {
+                // বেনামী ব্যবহারকারী হলে লগইন করতে বলুন
+                if (!userId || currentUser.email === 'anonymous') {
+                    setMessage('কোর্স আনলক করার জন্য লগইন করুন।');
+                    return;
+                }
+                if (!code) {
+                    setMessage('অনুগ্রহ করে একটি কোড দিন।');
+                    return;
+                }
+
+                const result = useUnlockCode(code, courseId, userId);
+                setMessage(result.message);
+                if (result.success) {
+                    setIsUnlocked(true);
+                    setCode(''); // কোড ইনপুট সাফ করুন
+                }
+            };
+
+            if (loading) return <LoadingSpinner />;
+            if (message && !course) return <MessageBox message={message} onClose={() => setMessage('')} />; // কোর্স না পাওয়া গেলে বার্তা দেখান
+            if (!course) return <p className="text-white text-center text-xl mt-10">কোর্স ডেটা লোড হয়নি।</p>;
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-purple-800 to-pink-500 p-8 text-white">
+                    <div className="max-w-4xl mx-auto bg-purple-900 bg-opacity-70 rounded-lg shadow-xl p-8 border border-purple-700">
+                        <h1 className="text-4xl font-bold mb-4">{course.name}</h1>
+                        <p className="text-lg mb-6">{course.description}</p>
+                        <p className="text-2xl font-semibold mb-6">মূল্য: ৳{course.price}</p>
+
+                        {isUnlocked ? (
+                            <div className="text-center">
+                                <p className="text-green-400 text-2xl font-bold mb-6">কোর্সটি আপনার জন্য আনলক করা হয়েছে! 🎉</p>
+                                <button
+                                    onClick={() => onNavigate('course-content', { courseId: course.id })}
+                                    className="bg-pink-600 text-white px-8 py-4 rounded-lg font-semibold text-xl hover:bg-pink-700 transition duration-300 transform hover:scale-105 shadow-lg"
+                                >
+                                    কোর্স শুরু করুন
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="bg-purple-800 p-6 rounded-lg shadow-md border border-purple-600">
+                                <h3 className="text-2xl font-semibold mb-4">কোর্স আনলক করুন</h3>
+                                <div className="flex flex-col md:flex-row gap-4 mb-4">
+                                    <input
+                                        type="text"
+                                        placeholder="আনলক কোড লিখুন"
+                                        value={code}
+                                        onChange={(e) => setCode(e.target.value)}
+                                        className="flex-grow p-3 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                    />
+                                    <button
+                                        onClick={handleUnlockWithCode}
+                                        className="bg-pink-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-pink-700 transition duration-300 shadow-md"
+                                    >
+                                        কোড ব্যবহার করুন
+                                    </button>
+                                </div>
+                                <p className="text-center text-gray-300">
+                                    অথবা, এই কোর্সটি কিনতে আমাদের সাপোর্টে যোগাযোগ করুন।
+                                </p>
+                            </div>
+                        )}
+
+                        <div className="text-center mt-8">
+                            <button
+                                onClick={() => onNavigate('course-list', { categoryId: course.category, categoryName: course.category })}
+                                className="bg-purple-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-purple-700 transition duration-300 shadow-md"
+                            >
+                                কোর্স লিস্টে ফিরে যান
+                            </button>
+                        </div>
+                    </div>
+                    {message && <MessageBox message={message} onClose={() => setMessage('')} />}
+                </div>
+            );
+        }
+
+        // কোর্স কন্টেন্ট পেজ
+        function CourseContentPage({ onNavigate, courseId }) {
+            const { userId, currentUser, getCourseById, getUserData, updateUserData } = useAppContext();
+            const [course, setCourse] = useState(null);
+            const [userProgress, setUserProgress] = useState({});
+            const [loading, setLoading] = useState(true);
+            const [message, setMessage] = useState('');
+            const [currentModuleIndex, setCurrentModuleIndex] = useState(0);
+            const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
+
+            useEffect(() => {
+                const fetchCourseContentAndProgress = () => {
+                    setLoading(true);
+                    try {
+                        const fetchedCourse = getCourseById(courseId);
+                        if (!fetchedCourse) {
+                            setMessage('কোর্সটি খুঁজে পাওয়া যায়নি।');
+                            setLoading(false);
+                            return;
+                        }
+                        setCourse(fetchedCourse);
+
+                        if (userId) {
+                            const userData = getUserData(userId);
+                            if (userData && userData.unlockedCourses && userData.unlockedCourses.includes(courseId)) {
+                                const progress = userData.courseProgress && userData.courseProgress[courseId] ?
+                                    userData.courseProgress[courseId] :
+                                    { totalModules: fetchedCourse.modules ? fetchedCourse.modules.length : 0, completedModules: 0, completedLessons: {} };
+                                setUserProgress(progress);
+
+                                // অগ্রগতি বা শুরু থেকে প্রথম মডিউল/পাঠ সেট করুন
+                                let initialModIdx = 0;
+                                let initialLessonIdx = 0;
+
+                                if (progress.completedModules < progress.totalModules) {
+                                    // প্রথম অসম্পূর্ণ মডিউল খুঁজুন
+                                    for (let i = 0; i < fetchedCourse.modules.length; i++) {
+                                        const module = fetchedCourse.modules[i];
+                                        const completedLessonsInModule = progress.completedLessons[module.id] ? progress.completedLessons[module.id].length : 0;
+                                        if (completedLessonsInModule < module.lessons.length) {
+                                            initialModIdx = i;
+                                            // এই মডিউলের প্রথম অসম্পূর্ণ পাঠ খুঁজুন
+                                            for (let j = 0; j < module.lessons.length; j++) {
+                                                if (!progress.completedLessons[module.id] || !progress.completedLessons[module.id].includes(module.lessons[j].id)) {
+                                                    initialLessonIdx = j;
+                                                    break;
+                                                }
+                                            }
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    // সকল মডিউল সম্পন্ন হয়েছে, প্রথম মডিউল/পাঠ ডিফল্ট করুন
+                                    initialModIdx = 0;
+                                    initialLessonIdx = 0;
+                                }
+
+                                setCurrentModuleIndex(initialModIdx);
+                                setCurrentLessonIndex(initialLessonIdx);
+
+                            } else {
+                                setMessage('এই কোর্সটি আনলক করা হয়নি।');
+                                setLoading(false);
+                                return;
+                            }
+                        } else {
+                            setMessage('কোর্স দেখতে লগইন করুন।');
+                            setLoading(false);
+                            return;
+                        }
+                    } catch (error) {
+                        setMessage(`কোর্স কন্টেন্ট লোড করতে সমস্যা হয়েছে: ${error.message}`);
+                        console.error("কোর্স কন্টেন্ট বা অগ্রগতি আনার সময় ত্রুটি:", error);
+                    } finally {
+                        setLoading(false);
+                    }
+                };
+
+                fetchCourseContentAndProgress();
+            }, [courseId, userId, getCourseById, getUserData, updateUserData]);
+
+
+            const handleLessonComplete = (moduleId, lessonId) => {
+                if (!userId) return;
+
+                const updatedProgress = { ...userProgress };
+                if (!updatedProgress.completedLessons[moduleId]) {
+                    updatedProgress.completedLessons[moduleId] = [];
+                }
+
+                if (!updatedProgress.completedLessons[moduleId].includes(lessonId)) {
+                    updatedProgress.completedLessons[moduleId].push(lessonId);
+
+                    // বর্তমান মডিউলের সকল পাঠ সম্পন্ন হয়েছে কিনা তা পরীক্ষা করুন
+                    const currentModule = course.modules[currentModuleIndex];
+                    const allLessonsInModuleCompleted = currentModule.lessons.every(lesson =>
+                        updatedProgress.completedLessons[moduleId].includes(lesson.id)
+                    );
+
+                    if (allLessonsInModuleCompleted) {
+                        updatedProgress.completedModules = (updatedProgress.completedModules || 0) + 1;
+                    }
+
+                    setUserProgress(updatedProgress);
+                    updateUserData(userId, {
+                        courseProgress: {
+                            ...(getUserData(userId).courseProgress || {}),
+                            [courseId]: updatedProgress
+                        }
+                    });
+                }
+            };
+
+            const isLessonCompleted = (moduleId, lessonId) => {
+                return userProgress.completedLessons &&
+                    userProgress.completedLessons[moduleId] &&
+                    userProgress.completedLessons[moduleId].includes(lessonId);
+            };
+
+            const goToNextLesson = () => {
+                const currentModule = course.modules[currentModuleIndex];
+                if (currentLessonIndex < currentModule.lessons.length - 1) {
+                    setCurrentLessonIndex(prev => prev + 1);
+                } else if (currentModuleIndex < course.modules.length - 1) {
+                    setCurrentModuleIndex(prev => prev + 1);
+                    setCurrentLessonIndex(0);
+                } else {
+                    setMessage('আপনি এই কোর্সের সকল পাঠ সম্পন্ন করেছেন! অভিনন্দন!');
+                }
+            };
+
+            const goToPreviousLesson = () => {
+                if (currentLessonIndex > 0) {
+                    setCurrentLessonIndex(prev => prev - 1);
+                } else if (currentModuleIndex > 0) {
+                    setCurrentModuleIndex(prev => prev - 1);
+                    const prevModule = course.modules[currentModuleIndex - 1];
+                    setCurrentLessonIndex(prevModule.lessons.length - 1);
+                } else {
+                    setMessage('আপনি প্রথম পাঠে আছেন।');
+                }
+            };
+
+            if (loading) return <LoadingSpinner />;
+            if (message && !course) return <MessageBox message={message} onClose={() => onNavigate('home')} />;
+            if (!course) return <p className="text-white text-center text-xl mt-10">কোর্স ডেটা লোড হয়নি।</p>;
+
+            const currentModule = course.modules[currentModuleIndex];
+            const currentLesson = currentModule.lessons[currentLessonIndex];
+            const totalLessonsInModule = currentModule.lessons.length;
+            const completedLessonsInModule = userProgress.completedLessons[currentModule.id] ? userProgress.completedLessons[currentModule.id].length : 0;
+            const moduleProgressPercentage = totalLessonsInModule > 0 ? (completedLessonsInModule / totalLessonsInModule) * 100 : 0;
+
+            const totalCourseModules = course.modules.length;
+            const completedCourseModules = userProgress.completedModules || 0;
+            const courseProgressPercentage = totalCourseModules > 0 ? (completedCourseModules / totalCourseModules) * 100 : 0;
+
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-purple-800 to-pink-500 p-4 text-white flex flex-col lg:flex-row">
+                    {/* মডিউল এবং পাঠের জন্য সাইডবার */}
+                    <div className="w-full lg:w-1/4 bg-purple-900 bg-opacity-80 rounded-lg shadow-xl p-6 lg:mr-4 mb-4 lg:mb-0 overflow-y-auto max-h-[90vh]">
+                        <h2 className="text-3xl font-bold mb-6 text-center text-pink-300">কোর্স সূচী</h2>
+                        <div className="mb-6">
+                            <p className="text-lg font-semibold mb-2">কোর্স অগ্রগতি: {courseProgressPercentage.toFixed(0)}%</p>
+                            <div className="w-full bg-gray-700 rounded-full h-2.5">
+                                <div className="bg-green-400 h-2.5 rounded-full" style={{ width: `${courseProgressPercentage}%` }}></div>
+                            </div>
+                        </div>
+                        {course.modules.map((module, modIdx) => (
+                            <div key={module.id} className="mb-4">
+                                <button
+                                    onClick={() => setCurrentModuleIndex(modIdx)}
+                                    className={`w-full text-left p-3 rounded-md font-semibold ${currentModuleIndex === modIdx ? 'bg-pink-600' : 'bg-purple-700 hover:bg-purple-600'} transition duration-300`}
+                                >
+                                    {modIdx + 1}. {module.name}
+                                </button>
+                                {currentModuleIndex === modIdx && (
+                                    <ul className="ml-4 mt-2 space-y-2">
+                                        {module.lessons.map((lesson, lesIdx) => (
+                                            <li key={lesson.id}>
+                                                <button
+                                                    onClick={() => setCurrentLessonIndex(lesIdx)}
+                                                    className={`w-full text-left p-2 rounded-md ${currentLessonIndex === lesIdx ? 'bg-purple-500' : 'hover:bg-purple-600'} ${isLessonCompleted(module.id, lesson.id) ? 'text-green-300' : 'text-white'} transition duration-300 flex items-center`}
+                                                >
+                                                    <span className="mr-2">
+                                                        {isLessonCompleted(module.id, lesson.id) ? '✅' : '📖'}
+                                                    </span>
+                                                    {modIdx + 1}.{lesIdx + 1}. {lesson.name}
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* প্রধান কন্টেন্ট এলাকা */}
+                    <div className="flex-1 bg-purple-900 bg-opacity-80 rounded-lg shadow-xl p-6 border border-purple-700">
+                        <h2 className="text-3xl font-bold mb-4 text-pink-300">{currentModule.name}</h2>
+                        <h3 className="text-2xl font-semibold mb-6">{currentLesson.name}</h3>
+
+                        {currentLesson.videoUrl && (
+                            <div className="relative w-full overflow-hidden rounded-lg mb-6" style={{ paddingTop: '56.25%' }}>
+                                <iframe
+                                    className="absolute top-0 left-0 w-full h-full rounded-lg"
+                                    src={currentLesson.videoUrl}
+                                    title={currentLesson.name}
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
+                        )}
+
+                        <p className="text-lg mb-8 leading-relaxed">{currentLesson.content}</p>
+
+                        <div className="mb-6">
+                            <p className="text-lg font-semibold mb-2">মডিউল অগ্রগতি: {moduleProgressPercentage.toFixed(0)}%</p>
+                            <div className="w-full bg-gray-700 rounded-full h-2.5">
+                                <div className="bg-green-400 h-2.5 rounded-full" style={{ width: `${moduleProgressPercentage}%` }}></div>
+                            </div>
+                        </div>
+
+                        <div className="flex justify-between items-center mt-8">
+                            <button
+                                onClick={goToPreviousLesson}
+                                disabled={currentModuleIndex === 0 && currentLessonIndex === 0}
+                                className="bg-purple-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-purple-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                            >
+                                পূর্ববর্তী পাঠ
+                            </button>
+                            <button
+                                onClick={() => handleLessonComplete(currentModule.id, currentLesson.id)}
+                                disabled={isLessonCompleted(currentModule.id, currentLesson.id)}
+                                className="bg-green-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-green-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                            >
+                                {isLessonCompleted(currentModule.id, currentLesson.id) ? 'সম্পন্ন হয়েছে ✅' : 'সম্পন্ন করুন'}
+                            </button>
+                            <button
+                                onClick={goToNextLesson}
+                                disabled={currentModuleIndex === course.modules.length - 1 && currentLessonIndex === currentModule.lessons.length - 1}
+                                className="bg-purple-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-purple-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+                            >
+                                পরবর্তী পাঠ
+                            </button>
+                        </div>
+
+                        <div className="text-center mt-8">
+                            <button
+                                onClick={() => onNavigate('course-detail', { courseId: course.id })}
+                                className="bg-pink-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-pink-700 transition duration-300 shadow-md"
+                            >
+                                কোর্স বিস্তারিততে ফিরে যান
+                            </button>
+                        </div>
+                    </div>
+                    {message && <MessageBox message={message} onClose={() => setMessage('')} />}
+                </div>
+            );
+        }
+
+        // প্রোফাইল পেজ
+        function ProfilePage({ onNavigate }) {
+            const { userId, currentUser, getUserData, allCourses } = useAppContext();
+            const [userData, setUserData] = useState(null);
+            const [loading, setLoading] = useState(true);
+            const [message, setMessage] = useState('');
+
+            useEffect(() => {
+                if (userId) {
+                    setLoading(true);
+                    try {
+                        const data = getUserData(userId);
+                        setUserData(data);
+                    } catch (error) {
+                        setMessage('প্রোফাইল ডেটা লোড করতে সমস্যা হয়েছে।');
+                        console.error("প্রোফাইল ডেটা আনার সময় ত্রুটি:", error);
+                    } finally {
+                        setLoading(false);
+                    }
+                } else {
+                    setMessage('প্রোফাইল দেখতে লগইন করুন।');
+                    setLoading(false);
+                }
+            }, [userId, getUserData]);
+
+            if (loading) return <LoadingSpinner />;
+            if (message) return <MessageBox message={message} onClose={() => onNavigate('login')} />;
+            if (!userData) return <p className="text-white text-center text-xl mt-10">প্রোফাইল ডেটা পাওয়া যায়নি।</p>;
+
+            const unlockedCoursesDetails = (userData.unlockedCourses || [])
+                .map(courseId => allCourses.find(c => c.id === courseId))
+                .filter(Boolean); // কোর্স না পাওয়া গেলে null/undefined বাদ দিন
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-purple-800 to-pink-500 p-8 text-white">
+                    <div className="max-w-3xl mx-auto bg-purple-900 bg-opacity-70 rounded-lg shadow-xl p-8 border border-purple-700">
+                        <h1 className="text-4xl font-bold mb-6 text-center text-pink-300">আমার প্রোফাইল</h1>
+                        <div className="space-y-4 text-lg">
+                            <p><strong className="text-purple-300">ইমেইল:</strong> {userData.email}</p>
+                            <p><strong className="text-purple-300">প্রথম নাম:</strong> {userData.firstName || 'N/A'}</p>
+                            <p><strong className="text-purple-300">শেষ নাম:</strong> {userData.lastName || 'N/A'}</p>
+                            <p><strong className="text-purple-300">ফোন নম্বর:</strong> {userData.phoneNumber || 'N/A'}</p>
+                            <p><strong className="text-purple-300">বাবার নাম:</strong> {userData.fatherName || 'N/A'}</p>
+                            <p><strong className="text-purple-300">বাবার ফোন নম্বর:</strong> {userData.fatherPhoneNumber || 'N/A'}</p>
+                            <p><strong className="text-purple-300">রোল নম্বর:</strong> {userData.rollNumber || 'N/A'}</p>
+                            <p><strong className="text-purple-300">ইউজার আইডি:</strong> {userId}</p>
+                            <p><strong className="text-purple-300">অ্যাডমিন স্ট্যাটাস:</strong> {userData.isAdmin ? 'হ্যাঁ' : 'না'}</p>
+                            <p><strong className="text-purple-300">অ্যাকাউন্ট তৈরি:</strong> {new Date(userData.createdAt).toLocaleDateString('bn-BD')}</p>
+                        </div>
+
+                        <h2 className="text-3xl font-bold mt-8 mb-4 text-pink-300">আনলক করা কোর্সসমূহ</h2>
+                        {unlockedCoursesDetails.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {unlockedCoursesDetails.map(course => (
+                                    <button
+                                        key={course.id}
+                                        onClick={() => onNavigate('course-content', { courseId: course.id })}
+                                        className="bg-purple-800 p-4 rounded-lg shadow-md hover:bg-purple-700 transition duration-300 text-left border border-purple-600"
+                                    >
+                                        <h3 className="text-xl font-semibold text-white">{course.name}</h3>
+                                        <p className="text-gray-300 text-sm line-clamp-2">{course.description}</p>
+                                        <p className="text-pink-400 mt-2">অগ্রগতি: {
+                                            userData.courseProgress && userData.courseProgress[course.id] ?
+                                            `${((userData.courseProgress[course.id].completedModules || 0) / (userData.courseProgress[course.id].totalModules || 1) * 100).toFixed(0)}%` :
+                                            '0%'
+                                        }</p>
+                                    </button>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-gray-300">আপনি এখনো কোনো কোর্স আনলক করেননি।</p>
+                        )}
+
+                        <div className="text-center mt-8">
+                            <button
+                                onClick={() => onNavigate('home')}
+                                className="bg-pink-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-pink-700 transition duration-300 shadow-md"
+                            >
+                                হোমপেজে ফিরে যান
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // অ্যাডমিন প্যানেল
+        function AdminPanel({ onNavigate }) {
+            const { isAdmin, currentUser, allCourses, allCodes, allUsers, addCourse, generateCode, getAnnouncements, addAnnouncement, deleteAnnouncement, forceSignOutUser } = useAppContext();
+            const [message, setMessage] = useState('');
+            const [activeTab, setActiveTab] = useState('users'); // ডিফল্ট ট্যাব 'users' এ সেট করা হয়েছে
+            const [confirmAction, setConfirmAction] = useState(null); // { type: 'logout', userId: '', userEmail: '' }
+
+            // কোর্স ম্যানেজমেন্ট স্টেট
+            const [newCourseName, setNewCourseName] = useState('');
+            const [newCourseDesc, setNewCourseDesc] = useState('');
+            const [newCoursePrice, setNewCoursePrice] = useState('');
+            const [newCourseCategory, setNewCourseCategory] = useState('hsc-science');
+            const [newCourseModules, setNewCourseModules] = useState(''); // মডিউলের জন্য JSON স্ট্রিং
+
+            // কোড ম্যানেজমেন্ট স্টেট
+            const [codeCourseId, setCodeCourseId] = useState('');
+            const [generatedCode, setGeneratedCode] = useState('');
+
+            // ঘোষণা ম্যানেজমেন্ট স্টেট
+            const [newAnnTitle, setNewAnnTitle] = useState('');
+            const [newAnnContent, setNewAnnContent] = useState('');
+            const currentAnnouncements = getAnnouncements();
+
+
+            useEffect(() => {
+                if (!isAdmin) {
+                    setMessage('আপনার অ্যাডমিন অ্যাক্সেস নেই।');
+                    onNavigate('home'); // অ্যাডমিন না হলে রিডাইরেক্ট করুন
+                }
+            }, [isAdmin, onNavigate]);
+
+            const handleAddCourse = (e) => {
+                e.preventDefault();
+                try {
+                    const modulesParsed = newCourseModules ? JSON.parse(newCourseModules) : [];
+                    const newCourse = {
+                        name: newCourseName,
+                        description: newCourseDesc,
+                        price: parseFloat(newCoursePrice),
+                        category: newCourseCategory,
+                        modules: modulesParsed
+                    };
+                    addCourse(newCourse);
+                    setMessage('কোর্স সফলভাবে যোগ করা হয়েছে!');
+                    setNewCourseName('');
+                    setNewCourseDesc('');
+                    setNewCoursePrice('');
+                    setNewCourseModules('');
+                } catch (error) {
+                    setMessage(`কোর্স যোগ করতে সমস্যা হয়েছে: ${error.message}`);
+                    console.error("কোর্স যোগ করার সময় ত্রুটি:", error);
+                }
+            };
+
+            const handleGenerateCode = () => {
+                // যদি codeCourseId ফাঁকা থাকে, তাহলে এটি সকল কোর্সের জন্য প্রযোজ্য হবে
+                const codeResult = generateCode(codeCourseId || null);
+                setGeneratedCode(codeResult.code);
+                setMessage(`নতুন কোড তৈরি হয়েছে: ${codeResult.code}`);
+            };
+
+            const handleAddAnnouncement = (e) => {
+                e.preventDefault();
+                if (!newAnnTitle || !newAnnContent) {
+                    setMessage('শিরোনাম এবং বিষয়বস্তু উভয়ই প্রয়োজন।');
+                    return;
+                }
+                addAnnouncement({ title: newAnnTitle, content: newAnnContent });
+                setMessage('ঘোষণা সফলভাবে যোগ করা হয়েছে!');
+                setNewAnnTitle('');
+                setNewAnnContent('');
+            };
+
+            const handleDeleteAnnouncement = (id) => {
+                setConfirmAction({ type: 'deleteAnn', id: id, message: 'আপনি কি নিশ্চিত যে আপনি এই ঘোষণাটি মুছে ফেলতে চান?' });
+            };
+
+            const handleForceLogout = (targetUserId, targetUserEmail) => {
+                setConfirmAction({ type: 'logoutUser', userId: targetUserId, userEmail: targetUserEmail, message: `আপনি কি নিশ্চিত যে আপনি ${targetUserEmail} (${targetUserId}) এই ইউজারকে লগআউট করতে চান?` });
+            };
+
+            const handleConfirm = () => {
+                if (!confirmAction) return;
+                if (confirmAction.type === 'deleteAnn') {
+                    deleteAnnouncement(confirmAction.id);
+                    setMessage('ঘোষণা মুছে ফেলা হয়েছে।');
+                } else if (confirmAction.type === 'logoutUser') {
+                    forceSignOutUser(confirmAction.userId);
+                    setMessage(`ইউজার ${confirmAction.userEmail} সফলভাবে লগআউট করা হয়েছে।`);
+                }
+                setConfirmAction(null); // কনফার্মেশন বন্ধ করুন
+            };
+
+            const handleCancel = () => {
+                setConfirmAction(null); // কনফার্মেশন বন্ধ করুন
+            };
+
+            if (!isAdmin) {
+                return <LoadingSpinner />; // অথবা অনুমতি নেই বার্তা
+            }
+
+            const courseCategories = [
+                { name: 'SSC বিজ্ঞান', id: 'ssc-science' },
+                { name: 'SSC মানবিক', id: 'ssc-arts' },
+                { name: 'SSC ব্যবসায় শিক্ষা', id: 'ssc-commerce' },
+                { name: 'HSC বিজ্ঞান', id: 'hsc-science' },
+                { name: 'HSC মানবিক', id: 'hsc-arts' },
+                { name: 'HSC ব্যবসায় শিক্ষা', id: 'hsc-commerce' },
+            ];
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-purple-800 to-pink-500 p-8 text-white">
+                    <div className="max-w-6xl mx-auto bg-purple-900 bg-opacity-70 rounded-lg shadow-xl p-8 border border-purple-700">
+                        <h1 className="text-4xl font-bold mb-6 text-center text-pink-300">অ্যাডমিন প্যানেল</h1>
+                        <p className="text-center text-gray-300 mb-8">লগইন করা অ্যাডমিন: {currentUser?.email} (ID: {currentUser?.uid})</p>
+
+                        <div className="flex flex-wrap justify-center mb-8 gap-4">
+                            <button
+                                onClick={() => setActiveTab('courses')}
+                                className={`px-6 py-3 rounded-md font-semibold transition duration-300 ${activeTab === 'courses' ? 'bg-pink-600 text-white' : 'bg-purple-700 text-gray-200 hover:bg-purple-600'}`}
+                            >
+                                কোর্স ম্যানেজমেন্ট
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('codes')}
+                                className={`px-6 py-3 rounded-md font-semibold transition duration-300 ${activeTab === 'codes' ? 'bg-pink-600 text-white' : 'bg-purple-700 text-gray-200 hover:bg-purple-600'}`}
+                            >
+                                কোড ম্যানেজমেন্ট
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('announcements')}
+                                className={`px-6 py-3 rounded-md font-semibold transition duration-300 ${activeTab === 'announcements' ? 'bg-pink-600 text-white' : 'bg-purple-700 text-gray-200 hover:bg-purple-600'}`}
+                            >
+                                ঘোষণা ম্যানেজমেন্ট
+                            </button>
+                            <button
+                                onClick={() => setActiveTab('users')}
+                                className={`px-6 py-3 rounded-md font-semibold transition duration-300 ${activeTab === 'users' ? 'bg-pink-600 text-white' : 'bg-purple-700 text-gray-200 hover:bg-purple-600'}`}
+                            >
+                                ইউজার ম্যানেজমেন্ট
+                            </button>
+                        </div>
+
+                        {/* কোর্স ম্যানেজমেন্ট ট্যাব */}
+                        {activeTab === 'courses' && (
+                            <div className="bg-purple-800 p-6 rounded-lg shadow-md border border-purple-600">
+                                <h2 className="text-3xl font-bold mb-6 text-pink-300">নতুন কোর্স যোগ করুন</h2>
+                                <form onSubmit={handleAddCourse} className="space-y-4">
+                                    <input
+                                        type="text"
+                                        placeholder="কোর্সের নাম"
+                                        value={newCourseName}
+                                        onChange={(e) => setNewCourseName(e.target.value)}
+                                        className="w-full p-3 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                        required
+                                    />
+                                    <textarea
+                                        placeholder="কোর্সের বিবরণ"
+                                        value={newCourseDesc}
+                                        onChange={(e) => setNewCourseDesc(e.target.value)}
+                                        className="w-full p-3 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500 h-24"
+                                        required
+                                    ></textarea>
+                                    <input
+                                        type="number"
+                                        placeholder="মূল্য (৳)"
+                                        value={newCoursePrice}
+                                        onChange={(e) => setNewCoursePrice(e.target.value)}
+                                        className="w-full p-3 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                        required
+                                    />
+                                    <select
+                                        value={newCourseCategory}
+                                        onChange={(e) => setNewCourseCategory(e.target.value)}
+                                        className="w-full p-3 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                    >
+                                        {courseCategories.map(cat => (
+                                            <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                        ))}
+                                    </select>
+                                    <textarea
+                                        placeholder="মডিউল JSON (যেমন: [{&quot;id&quot;:&quot;mod1&quot;,&quot;name&quot;:&quot;মডিউল ১&quot;,&quot;lessons&quot;:[{&quot;id&quot;:&quot;les1.1&quot;,&quot;name&quot;:&quot;পাঠ ১.১&quot;,&quot;content&quot;:&quot;কন্টেন্ট&quot;,&quot;videoUrl&quot;:&quot;https://...&quot;}]}] )"
+                                        value={newCourseModules}
+                                        onChange={(e) => setNewCourseModules(e.target.value)}
+                                        className="w-full p-3 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500 h-32"
+                                    ></textarea>
+                                    <button
+                                        type="submit"
+                                        className="w-full bg-pink-600 text-white p-3 rounded-md font-semibold hover:bg-pink-700 transition duration-300 shadow-md"
+                                    >
+                                        কোর্স যোগ করুন
+                                    </button>
+                                </form>
+
+                                <h2 className="text-3xl font-bold mt-10 mb-6 text-pink-300">বর্তমান কোর্সসমূহ</h2>
+                                <div className="overflow-x-auto">
+                                    <table className="min-w-full bg-purple-700 rounded-lg shadow-md">
+                                        <thead>
+                                            <tr className="bg-purple-600">
+                                                <th className="py-3 px-4 text-left font-semibold">আইডি</th>
+                                                <th className="py-3 px-4 text-left font-semibold">নাম</th>
+                                                <th className="py-3 px-4 text-left font-semibold">ক্যাটাগরি</th>
+                                                <th className="py-3 px-4 text-left font-semibold">মূল্য</th>
+                                                <th className="py-3 px-4 text-left font-semibold">মডিউল</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {allCourses.map(course => (
+                                                <tr key={course.id} className="border-t border-purple-500 hover:bg-purple-600 transition duration-200">
+                                                    <td className="py-3 px-4">{course.id}</td>
+                                                    <td className="py-3 px-4">{course.name}</td>
+                                                    <td className="py-3 px-4">{course.category}</td>
+                                                    <td className="py-3 px-4">৳{course.price}</td>
+                                                    <td className="py-3 px-4">{course.modules ? course.modules.length : 0}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* কোড ম্যানেজমেন্ট ট্যাব */}
+                        {activeTab === 'codes' && (
+                            <div className="bg-purple-800 p-6 rounded-lg shadow-md border border-purple-600">
+                                <h2 className="text-3xl font-bold mb-6 text-pink-300">নতুন আনলক কোড তৈরি করুন</h2>
+                                <div className="flex flex-col md:flex-row gap-4 mb-6">
+                                    <select
+                                        value={codeCourseId}
+                                        onChange={(e) => setCodeCourseId(e.target.value)}
+                                        className="flex-grow p-3 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                    >
+                                        <option value="">একটি কোর্স নির্বাচন করুন (ঐচ্ছিক)</option>
+                                        {allCourses.map(course => (
+                                            <option key={course.id} value={course.id}>{course.name}</option>
+                                        ))}
+                                    </select>
+                                    <button
+                                        onClick={handleGenerateCode}
+                                        className="bg-pink-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-pink-700 transition duration-300 shadow-md"
+                                    >
+                                        কোড তৈরি করুন
+                                    </button>
+                                </div>
+                                {generatedCode && (
+                                    <p className="text-xl font-bold text-green-300 text-center mb-6">তৈরি করা কোড: <span className="bg-purple-700 p-2 rounded-md">{generatedCode}</span></p>
+                                )}
+
+                                <h2 className="text-3xl font-bold mt-10 mb-6 text-pink-300">বর্তমান আনলক কোডসমূহ</h2>
+                                <div className="overflow-x-auto">
+                                    <table className="min-w-full bg-purple-700 rounded-lg shadow-md">
+                                        <thead>
+                                            <tr className="bg-purple-600">
+                                                <th className="py-3 px-4 text-left font-semibold">কোড</th>
+                                                <th className="py-3 px-4 text-left font-semibold">কোর্স আইডি</th>
+                                                <th className="py-3 px-4 text-left font-semibold">ব্যবহৃত হয়েছে?</th>
+                                                <th className="py-3 px-4 text-left font-semibold">ব্যবহারকারী</th>
+                                                <th className="py-3 px-4 text-left font-semibold">ব্যবহারের সময়</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {allCodes.map((codeItem, index) => (
+                                                <tr key={index} className="border-t border-purple-500 hover:bg-purple-600 transition duration-200">
+                                                    <td className="py-3 px-4">{codeItem.code}</td>
+                                                    <td className="py-3 px-4">{codeItem.unlocksCourseId || 'সকল কোর্স'}</td>
+                                                    <td className="py-3 px-4">{codeItem.isUsed ? 'হ্যাঁ' : 'না'}</td>
+                                                    <td className="py-3 px-4">{codeItem.usedBy || 'N/A'}</td>
+                                                    <td className="py-3 px-4">{codeItem.usedAt ? new Date(codeItem.usedAt).toLocaleDateString('bn-BD') : 'N/A'}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ঘোষণা ম্যানেজমেন্ট ট্যাব */}
+                        {activeTab === 'announcements' && (
+                            <div className="bg-purple-800 p-6 rounded-lg shadow-md border border-purple-600">
+                                <h2 className="text-3xl font-bold mb-6 text-pink-300">নতুন ঘোষণা যোগ করুন</h2>
+                                <form onSubmit={handleAddAnnouncement} className="space-y-4 mb-10">
+                                    <input
+                                        type="text"
+                                        placeholder="ঘোষণার শিরোনাম"
+                                        value={newAnnTitle}
+                                        onChange={(e) => setNewAnnTitle(e.target.value)}
+                                        className="w-full p-3 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                                        required
+                                    />
+                                    <textarea
+                                        placeholder="ঘোষণার বিষয়বস্তু"
+                                        value={newAnnContent}
+                                        onChange={(e) => setNewAnnContent(e.target.value)}
+                                        className="w-full p-3 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-pink-500 h-24"
+                                        required
+                                    ></textarea>
+                                    <button
+                                        type="submit"
+                                        className="w-full bg-pink-600 text-white p-3 rounded-md font-semibold hover:bg-pink-700 transition duration-300 shadow-md"
+                                    >
+                                        ঘোষণা যোগ করুন
+                                    </button>
+                                </form>
+
+                                <h2 className="text-3xl font-bold mt-10 mb-6 text-pink-300">বর্তমান ঘোষণাসমূহ</h2>
+                                <div className="space-y-4">
+                                    {currentAnnouncements.length > 0 ? (
+                                        currentAnnouncements.map(ann => (
+                                            <div key={ann.id} className="bg-purple-700 p-4 rounded-md shadow-sm flex justify-between items-center border border-purple-500">
+                                                <div>
+                                                    <h3 className="text-xl font-semibold">{ann.title}</h3>
+                                                    <p className="text-gray-300 text-sm">{ann.content}</p>
+                                                    <p className="text-gray-400 text-xs mt-1">তারিখ: {new Date(ann.date).toLocaleDateString('bn-BD')}</p>
+                                                </div>
+                                                <button
+                                                    onClick={() => handleDeleteAnnouncement(ann.id)}
+                                                    className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 shadow-md"
+                                                >
+                                                    মুছুন
+                                                </button>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-gray-300 text-center">কোনো ঘোষণা পাওয়া যায়নি।</p>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ইউজার ম্যানেজমেন্ট ট্যাব */}
+                        {activeTab === 'users' && (
+                            <div className="bg-purple-800 p-6 rounded-lg shadow-md border border-purple-600">
+                                <h2 className="text-3xl font-bold mb-6 text-pink-300">সকল ব্যবহারকারী</h2>
+                                <div className="overflow-x-auto">
+                                    <table className="min-w-full bg-purple-700 rounded-lg shadow-md">
+                                        <thead>
+                                            <tr className="bg-purple-600">
+                                                <th className="py-3 px-4 text-left font-semibold">ইউজার আইডি</th>
+                                                <th className="py-3 px-4 text-left font-semibold">ইমেইল</th>
+                                                <th className="py-3 px-4 text-left font-semibold">প্রথম নাম</th>
+                                                <th className="py-3 px-4 text-left font-semibold">শেষ নাম</th>
+                                                <th className="py-3 px-4 text-left font-semibold">ফোন নম্বর</th>
+                                                <th className="py-3 px-4 text-left font-semibold">বাবার নাম</th>
+                                                <th className="py-3 px-4 text-left font-semibold">বাবার ফোন নম্বর</th>
+                                                <th className="py-3 px-4 text-left font-semibold">রোল নম্বর</th>
+                                                <th className="py-3 px-4 text-left font-semibold">অ্যাডমিন?</th>
+                                                <th className="py-3 px-4 text-left font-semibold">আনলক করা কোর্স</th>
+                                                <th className="py-3 px-4 text-left font-semibold">তৈরির তারিখ</th>
+                                                <th className="py-3 px-4 text-left font-semibold">অ্যাকশন</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Object.entries(allUsers).map(([uid, userData]) => (
+                                                <tr key={uid} className="border-t border-purple-500 hover:bg-purple-600 transition duration-200">
+                                                    <td className="py-3 px-4 text-sm">{uid}</td>
+                                                    <td className="py-3 px-4">{userData.email}</td>
+                                                    <td className="py-3 px-4">{userData.firstName || 'N/A'}</td>
+                                                    <td className="py-3 px-4">{userData.lastName || 'N/A'}</td>
+                                                    <td className="py-3 px-4">{userData.phoneNumber || 'N/A'}</td>
+                                                    <td className="py-3 px-4">{userData.fatherName || 'N/A'}</td>
+                                                    <td className="py-3 px-4">{userData.fatherPhoneNumber || 'N/A'}</td>
+                                                    <td className="py-3 px-4">{userData.rollNumber || 'N/A'}</td>
+                                                    <td className="py-3 px-4">{userData.isAdmin ? 'হ্যাঁ' : 'না'}</td>
+                                                    <td className="py-3 px-4">{userData.unlockedCourses ? userData.unlockedCourses.length : 0}</td>
+                                                    <td className="py-3 px-4">{new Date(userData.createdAt).toLocaleDateString('bn-BD')}</td>
+                                                    <td className="py-3 px-4">
+                                                        {uid !== currentUser.uid && ( // অ্যাডমিন নিজেকে লগআউট করতে পারবে না
+                                                            <button
+                                                                onClick={() => handleForceLogout(uid, userData.email)}
+                                                                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition duration-300 shadow-md"
+                                                            >
+                                                                লগআউট করুন
+                                                            </button>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="text-center mt-8">
+                            <button
+                                onClick={() => onNavigate('home')}
+                                className="bg-purple-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-purple-700 transition duration-300 shadow-md"
+                            >
+                                হোমপেজে ফিরে যান
+                            </button>
+                        </div>
+                    </div>
+                    {message && <MessageBox message={message} onClose={() => setMessage('')} />}
+                    {confirmAction && (
+                        <MessageBox
+                            message={confirmAction.message}
+                            onClose={handleCancel}
+                            onConfirm={handleConfirm}
+                        >
+                            <div className="flex justify-center space-x-4 mt-4">
+                                <button
+                                    onClick={handleConfirm}
+                                    className="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition duration-300 font-medium shadow-md"
+                                >
+                                    হ্যাঁ
+                                </button>
+                                <button
+                                    onClick={handleCancel}
+                                    className="px-6 py-2 bg-gray-400 text-gray-800 rounded-md hover:bg-gray-500 transition duration-300 font-medium shadow-md"
+                                >
+                                    না
+                                </button>
+                            </div>
+                        </MessageBox>
+                    )}
+                </div>
+            );
+        }
+
+        // ঘোষণা পেজ
+        function AnnouncementsPage({ onNavigate }) {
+            const { getAnnouncements } = useAppContext();
+            const announcements = getAnnouncements();
+
+            return (
+                <div className="min-h-screen bg-gradient-to-br from-purple-800 to-pink-500 p-8 text-white">
+                    <div className="max-w-4xl mx-auto bg-purple-900 bg-opacity-70 rounded-lg shadow-xl p-8 border border-purple-700">
+                        <h1 className="text-4xl font-bold mb-8 text-center text-pink-300">ঘোষণাসমূহ</h1>
+                        {announcements.length > 0 ? (
+                            <div className="space-y-6">
+                                {announcements.map(ann => (
+                                    <div key={ann.id} className="bg-purple-800 p-5 rounded-lg shadow-md border border-purple-600">
+                                        <h2 className="text-2xl font-bold text-pink-300 mb-2">{ann.title}</h2>
+                                        <p className="text-gray-200 text-lg mb-3 leading-relaxed">{ann.content}</p>
+                                        <p className="text-gray-400 text-sm">প্রকাশের তারিখ: {new Date(ann.date).toLocaleDateString('bn-BD')}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-gray-300 text-center text-xl">বর্তমানে কোনো ঘোষণা নেই।</p>
+                        )}
+                        <div className="text-center mt-8">
+                            <button
+                                onClick={() => onNavigate('home')}
+                                className="bg-purple-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-purple-700 transition duration-300 shadow-md"
+                            >
+                                হোমপেজে ফিরে যান
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+
+        // প্রধান অ্যাপ কম্পোনেন্ট
+        function App() {
+            const [currentPage, setCurrentPage] = useState('home');
+            const [pageProps, setPageProps] = useState({});
+            const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+            const toggleSidebar = () => {
+                setIsSidebarOpen(!isSidebarOpen);
+            };
+
+            const handleNavigate = (page, props = {}) => {
+                setCurrentPage(page);
+                setPageProps(props);
+                if (window.innerWidth < 1024) { // ছোট স্ক্রিনের জন্য নেভিগেট করার সময় সাইডবার বন্ধ করুন
+                    setIsSidebarOpen(false);
+                }
+            };
+
+            const renderPage = () => {
+                switch (currentPage) {
+                    case 'login':
+                        return <LoginPage onNavigate={handleNavigate} />;
+                    case 'register':
+                        return <RegistrationPage onNavigate={handleNavigate} />;
+                    case 'admin-login':
+                        return <AdminLoginPage onNavigate={handleNavigate} />;
+                    case 'home':
+                        return <HomePage onNavigate={handleNavigate} />;
+                    case 'course-list':
+                        return <CourseListingPage onNavigate={handleNavigate} {...pageProps} />;
+                    case 'course-detail':
+                        return <CourseDetailPage onNavigate={handleNavigate} {...pageProps} />;
+                    case 'course-content':
+                        return <CourseContentPage onNavigate={handleNavigate} {...pageProps} />;
+                    case 'profile':
+                        return <ProfilePage onNavigate={handleNavigate} />;
+                    case 'admin':
+                        return <AdminPanel onNavigate={handleNavigate} />;
+                    case 'announcements':
+                        return <AnnouncementsPage onNavigate={handleNavigate} />;
+                    default:
+                        return <HomePage onNavigate={handleNavigate} />;
+                }
+            };
+
+            return (
+                <AppProvider>
+                    <div className="min-h-screen flex flex-col lg:flex-row font-sans">
+                        {/* মোবাইলের জন্য নেভিগেশন বার */}
+                        <Navbar onNavigate={handleNavigate} toggleSidebar={toggleSidebar} />
+                        
+                        {/* ডেস্কটপ এবং মোবাইল ওভারলের জন্য সাইডবার */}
+                        <Sidebar onNavigate={handleNavigate} isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+
+                        {/* প্রধান কন্টেন্ট এলাকা */}
+                        <main className="flex-1 overflow-y-auto">
+                            {renderPage()}
+                        </main>
+                    </div>
+                </AppProvider>
+            );
+        }
+
+        // --- Mount React App ---
+        const container = document.getElementById('root');
+        const root = ReactDOM.createRoot(container);
+        root.render(<App />);
+
+    </script>
+</body>
+</html>
